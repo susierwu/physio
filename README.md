@@ -26,4 +26,31 @@ It is an **educational and physiotherapy support tool**, not a substitute for pr
 
 ---
 
+## 🧠 本地运行（macOS / Windows）
+
+> 若尚未安装 Python，请先从官方页面安装最新版本：  
+> 👉 [https://www.python.org/downloads/](https://www.python.org/downloads/)  
+> **务必在安装时勾选 “Add Python to PATH” 选项。**
+
+---
+
+### 🪜 运行步骤（1️⃣ → 5️⃣）
+
+```bash
+# 1️⃣ 克隆项目
+git clone git@github.com:susierwu/physio.git
+cd physio
+
+# 2️⃣ 若提示 pip 不存在，先修复 pip
+python3 -m ensurepip --upgrade
+
+# 3️⃣ 安装依赖库
+python3 -m pip install -r requirements.txt
+# （Windows 用户可将以上命令中的 python3 替换为 python）
+
+# 4️⃣ 启动应用
+streamlit run src/physio_asst/streamlit_app/app.py
+
+# 5️⃣ 浏览器访问（若未自动打开）
+# http://localhost:8501
 
