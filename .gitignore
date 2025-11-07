@@ -25,9 +25,9 @@ env/
 .uv_cache/
 uv.lock
 
-# Streamlit secrets/config (never commit API keys!)
-.streamlit/secrets.toml
-.streamlit/config.toml
+# Streamlit secrets/config (never commit API keys! here just share with dear first-authors)
+#.streamlit/secrets.toml
+#.streamlit/config.toml
 
 # macOS metadata
 .DS_Store
