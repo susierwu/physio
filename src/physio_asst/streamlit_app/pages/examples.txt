@@ -1,0 +1,90 @@
+MRI results example: 
+- 影像所见: 右肩冈上肌及肩胛下肌腱增粗，内可见条片状稍长T1稍长T2信号，余右肩袖形态、信号正常，未见明显撕裂改变。 右肩盂唇形态、信号正常。肩峰下囊区混杂信号，右肱骨头可见斑片模糊骨髓水肿，余右肩余组及骨形态、信号正常，未见明显异常信号。右肩关节可见弧形积液信号。#影像诊断:  考虑右肩冈上肌及肩胛下肌腱损伤，请结合临床。右肩关节囊渗液、粘连性关节炎可能。右肱骨头骨髓水肿。右侧肩关节少量积液。
+
+Opposite doctor's opinion: 
+- Doctor1. 我医生让我做爬墙练习然后要稍微忍着痛做，因为我已经受伤超过6个月，如果再不做粘连会更加严重
+- Doctor2. 加拿大医生说现在做爬墙太激进了，从isometric练习开始做，用辅助棒做flexation / abduction 练习
+
+questions that I have:  
+1. 我现在能做俯卧撑/burpee跳嘛？
+2. 如果要做一些运动，我肯定又会摔倒胳膊，那么请建议我是带运动绑带嘛还是带护肩啊？
+3. 医生给我配的celecoxib，说taken as needed, 所以我每天晚饭时候吃一颗，但是他写的是标准一天吃两颗，我到底怎么吃啊？ 
+4. 我能不能白天用Voltaren，晚上贴Flurbiprofen膏药？还是说统一只用一个NSAIDS效果更好？
+5. TENS家用小型按摩器对我有帮助吗需要买吗？
+
+
+
+
+
+
+
+
+
+
+
+MRI back/waist (FR original, with EN/CN translation below, please respond in Chinese)
+
+IRM LOMBO-SACRÉE
+Renseignement clinique : Lombalgie chronique, douleur para-vertébrale inférieure droite augmentant, engourdissements intermittents du membre inférieur droit.
+Première exploration de ce type pour ce patient dans notre département.
+Technique :
+Selon la technique standard sans injection de Gadolinium.
+Constatations :
+On présume qu’il existe cinq (5) corps vertébraux lombaires. Le cône médullaire se termine normalement à D12–L1. La portion visible de la moelle épinière montre une intensité de signal normale.
+Les niveaux étudiés vont de D12 à S1.
+D12–L1, L1–L2, L2–L3, L3–L4 :
+Il n’y a pas de hernie discale centrale ni de sténose du canal rachidien.
+L3–L4 :
+Bombement discal minimal entraînant un rétrécissement modéré du foramen neural droit. Ces changements peuvent avoir un effet sur les racines nerveuses sortantes à ce niveau. Il n’y a pas de protrusion discale centrale ni de sténose du canal rachidien.
+L4–L5 :
+Protrusion discale centro-paracentral gauche associée à un hypersignal. Celle-ci mesure à peine 1 à 2 mm d’épaisseur dans le plan antéropostérieur. Ces changements entraînent une très légère diminution du foramen neural gauche et peuvent affecter les racines nerveuses sortantes à ce niveau, surtout à gauche. Il n’y a pas de sténose du canal rachidien.
+L5–S1 :
+Il n’y a pas de hernie discale centrale, pas de sténose du canal rachidien, ni d’atteinte foraminale significative.
+MRI LUMBO-SACRAL SPINE
+Clinical Information:
+Chronic low back pain, worsening right lower paravertebral pain, and intermittent numbness in the right leg.
+This is the first examination of this type for this patient in our department.
+Technique:
+Performed according to standard technique, without Gadolinium injection.
+Findings:
+It is presumed that there are five (5) lumbar vertebral bodies.
+The conus medullaris terminates normally at D12–L1.
+The visible portion of the spinal cord shows normal signal intensity.
+The levels studied are from D12 to S1.
+D12–L1, L1–L2, L2–L3, L3–L4:
+No central disc herniation or spinal canal stenosis observed.
+L3–L4:
+Minimal disc bulging causing mild to moderate narrowing of the right neural foramen.
+These changes may affect the exiting nerve roots at this level.
+No central disc protrusion or spinal canal stenosis noted.
+L4–L5:
+Left central/paracentral disc protrusion associated with hypersignal.
+It measures only about 1–2 mm in the anteroposterior dimension.
+These changes cause a very slight decrease in the left neural foramen and may affect the exiting nerve roots at this level, especially on the left.
+No spinal canal stenosis observed.
+L5–S1:
+No central disc herniation, spinal canal stenosis, or significant foraminal involvement observed.
+腰骶椎核磁共振（MRI）报告
+临床信息：
+慢性腰痛，右下椎旁疼痛加重，右腿间歇性麻木。
+这是该患者在本院进行的首次此类检查。
+技术：
+采用标准技术完成，未注射钆对比剂。
+检查结果：
+推测有五个（5）腰椎椎体。
+脊髓圆锥正常终止于 D12–L1。
+可见的脊髓部分信号强度正常。
+检查范围为 D12 至 S1。
+D12–L1, L1–L2, L2–L3, L3–L4：
+未见中央椎间盘突出或椎管狭窄。
+L3–L4：
+椎间盘轻微膨出，导致右侧神经孔轻度至中度变窄。
+这些改变可能影响该水平的神经根。
+未见中央椎间盘突出或椎管狭窄。
+L4–L5：
+左侧中央/旁中央椎间盘突出，并伴有高信号。
+前后径厚度约为 1–2 毫米。
+此改变导致左侧神经孔轻微变窄，可能影响该水平的神经根，尤其是左侧。
+未见椎管狭窄。
+L5–S1：
+未见中央椎间盘突出、椎管狭窄或明显的神经孔受压。
