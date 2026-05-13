@@ -1,6 +1,21 @@
 import streamlit as st
 
 
+#def _prefill_api_key(session_key: str, secret_key: str) -> None:
+#    """Populate session state with secrets.toml value if available and unset."""
+#    if session_key in st.session_state and st.session_state[session_key]:
+#        return
+#    try:
+#        secret_val = st.secrets["api_keys"][secret_key]
+#        if isinstance(secret_val, str) and secret_val.strip():
+#            st.session_state[session_key] = secret_val.strip()
+#    except (KeyError, AttributeError):
+#        return
+
+#_prefill_api_key("google_api_key", "google_genai")
+#_prefill_api_key("deepseek_api_key", "deepseek")
+
+
 st.set_page_config(page_title="Physiotherapy Diagnosis Assistant", page_icon="🩺", layout="wide")
 st.title("🩺 PhysioAsst: Radiology-based Assistant")
 st.markdown(
@@ -9,6 +24,28 @@ st.markdown(
     "</h5>",
     unsafe_allow_html=True,
 )
+
+with st.sidebar:
+    st.header("🔐 API Configuration")
+    st.caption("Provide your own API keys. They are stored only for this session.")
+
+    google_key_input = st.text_input(
+        "Google Gemini API Key",
+        value=st.session_state.get("google_api_key", ""),
+        type="password",
+    )
+    deepseek_key_input = st.text_input(
+        "DeepSeek API Key",
+        value=st.session_state.get("deepseek_api_key", ""),
+        type="password",
+    )
+
+    if st.button("Save API keys"):
+        st.session_state["google_api_key"] = google_key_input.strip()
+        st.session_state["deepseek_api_key"] = deepseek_key_input.strip()
+        st.success("API keys updated for this session.")
+
+
 
 choice = st.selectbox(
     "Understand about the body region that you're going to analyze:",

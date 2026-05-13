@@ -16,4 +16,4 @@ pillow
 
 # === Compatibility fix (critical) ===
 protobuf<4,>=3.20.3
-
+setuptools

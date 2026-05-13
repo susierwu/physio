@@ -3,7 +3,63 @@
 import streamlit as st
 from openai import OpenAI
 import google.generativeai as genai
+import os
 import re
+
+ENV_KEY_NAMES = {
+    "google_genai": "GOOGLE_GENAI_API_KEY",
+    "deepseek": "DEEPSEEK_API_KEY",
+}
+
+def get_api_key(secret_key: str, session_key: str):
+    """
+    Fetch an API key without hardcoding credentials.
+
+    Priority:
+      1. User-supplied (from app.py sidebar -> st.session_state)
+      2. Streamlit secrets.toml / Streamlit Cloud Secrets
+      3. Environment variables
+    """
+    session_value = st.session_state.get(session_key)
+    if isinstance(session_value, str):
+        session_value = session_value.strip()
+    if session_value:
+        st.info(f"Using user-supplied {secret_key} API key.")
+        return session_value
+
+    try:
+        secret_value = st.secrets["api_keys"][secret_key]
+        if secret_value:
+            st.info(f"Loaded {secret_key} API key from Streamlit secrets.")
+            return secret_value.strip()
+    except (KeyError, AttributeError):
+        pass
+
+    env_name = ENV_KEY_NAMES.get(secret_key)
+    if env_name:
+        env_value = os.environ.get(env_name, "").strip()
+        if env_value:
+            st.info(f"Loaded {secret_key} API key from {env_name}.")
+            return env_value
+
+    return None
+
+
+def require_api_key(secret_key: str, session_key: str, provider_label: str):
+    api_key = get_api_key(secret_key, session_key)
+    if not api_key:
+        st.warning(
+            f"Missing {provider_label} API key. Provide it in the sidebar, "
+            f"Streamlit secrets under [api_keys].{secret_key}, or {ENV_KEY_NAMES.get(secret_key, 'an environment variable')}."
+        )
+    return api_key
+
+
+def rerun_app():
+    if hasattr(st, "rerun"):
+        st.rerun()
+    else:
+        st.experimental_rerun()
 
 # -------------------------------
 # HELPER FUNCTION – Formatting AI output
@@ -35,7 +91,14 @@ def format_diagnosis_output(raw_text, color):
 # -------------------------------
 # MAIN FUNCTION – Runs the 4-step workflow
 # -------------------------------
-def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, rehab_links):
+def run_body_region_app(
+    region_name,
+    system_prompt,
+    compare_prompt,
+    qa_prompt,
+    rehab_links,
+    prefilled_example=None,
+):
     st.header(f"🩺  {region_name} Diagnosis Assistant")
     # -------------------------------
     # MODEL SELECTION
@@ -52,7 +115,15 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
     # -------------------------------    
     st.text(f"Enter your radiology exam (e.g., MRI, ultrasound, x-ray) description and get LLM-predicted top 3 {region_name.lower()} conditions.")
     #st.text(f"An example for my poor shoulder: pages/examples.txt  ")
-    mri_text = st.text_area(f"description here", placeholder=f"Paste description ONLY for {region_name}", height=150)
+    description_label = "description here"
+    if prefilled_example:
+        description_label += " (a prefilled example attached in the box)"
+    mri_text = st.text_area(
+        description_label,
+        value=prefilled_example or "",
+        placeholder=f"Paste description ONLY for {region_name}",
+        height=280 if prefilled_example else 150,
+    )
     
     full_response_text = ""
 
@@ -60,42 +131,51 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
         if not mri_text.strip():
             st.warning("Please enter exam description first.")
         else:
-            if MODEL_PROVIDER == "Gemini":
-                genai.configure(api_key=st.secrets["api_keys"]["google_genai"])
-                model = genai.GenerativeModel("gemini-2.0-flash", system_instruction=system_prompt)
-                st.markdown("##### 🔴 Google Gemini thinks:")
-                with st.spinner("Gemini is analyzing..."):
-                    response = model.generate_content(mri_text, stream=False)
-                    formatted = format_diagnosis_output(response.text, "red")
-                    st.markdown(formatted, unsafe_allow_html=True)
-                    full_response_text = response.text
+            success = False
 
-            elif MODEL_PROVIDER == "DeepSeek":
-                client = OpenAI(
-                    api_key=st.secrets["api_keys"]["deepseek"],
-                    base_url="https://api.deepseek.com",
-                )
-                st.markdown("##### 🟢 DeepSeek thinks:")
-                with st.spinner("DeepSeek is analyzing..."):
-                    response = client.chat.completions.create(
-                        model="deepseek-chat",
-                        messages=[
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": mri_text},
-                        ],
-                        temperature=TEMPERATURE,
-                        stream=False,
-                    )
-                    formatted = format_diagnosis_output(response.choices[0].message.content, "green")
-                    st.markdown(formatted, unsafe_allow_html=True)
-                    full_response_text = response.choices[0].message.content
+            try:
+                if MODEL_PROVIDER == "Gemini":
+                    google_key = require_api_key("google_genai", "google_api_key", "Google Gemini")
+                    if google_key:
+                        genai.configure(api_key=google_key)
+                        model = genai.GenerativeModel("gemini-2.5-flash", system_instruction=system_prompt)
+                        st.markdown("##### 🔴 Google Gemini thinks:")
+                        with st.spinner("Gemini is analyzing..."):
+                            response = model.generate_content(mri_text, stream=False)
+                            full_response_text = response.text
+                            formatted = format_diagnosis_output(full_response_text, "red")
+                            st.markdown(formatted, unsafe_allow_html=True)
+                            success = True
 
-            st.session_state["mri_text"] = mri_text
-            st.session_state["diagnosis_result"] = full_response_text
-            st.session_state["model_provider"] = MODEL_PROVIDER
+                elif MODEL_PROVIDER == "DeepSeek":
+                    deepseek_key = require_api_key("deepseek", "deepseek_api_key", "DeepSeek")
+                    if deepseek_key:
+                        client = OpenAI(
+                            api_key=deepseek_key,
+                            base_url="https://api.deepseek.com",
+                        )
+                        st.markdown("##### 🟢 DeepSeek thinks:")
+                        with st.spinner("DeepSeek is analyzing..."):
+                            response = client.chat.completions.create(
+                                model="deepseek-chat",
+                                messages=[
+                                    {"role": "system", "content": system_prompt},
+                                    {"role": "user", "content": mri_text},
+                                ],
+                                temperature=TEMPERATURE,
+                                stream=False,
+                            )
+                            full_response_text = response.choices[0].message.content
+                            formatted = format_diagnosis_output(full_response_text, "green")
+                            st.markdown(formatted, unsafe_allow_html=True)
+                            success = True
+            except Exception as exc:
+                st.error(f"{MODEL_PROVIDER} request failed: {exc}")
 
-
-            
+            if success:
+                st.session_state["mri_text"] = mri_text
+                st.session_state["diagnosis_result"] = full_response_text
+                st.session_state["model_provider"] = MODEL_PROVIDER
 
     # -------------------------------
     # STEP 2 – EXERCISE PLAN LINKS (INTERACTIVE)
@@ -166,30 +246,40 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
                 st.warning("Please fill in both opinions.")
             else:
                 user_input = f"Doctor 1: {opinion1}\n\nDoctor 2: {opinion2}"
-                provider = st.session_state["model_provider"]
+                provider = st.session_state.get("model_provider", MODEL_PROVIDER)
                 
-                if provider == "Gemini":
-                    genai.configure(api_key=st.secrets["api_keys"]["google_genai"])
-                    model = genai.GenerativeModel("gemini-2.0-flash", system_instruction=compare_prompt_filled)
-                    with st.spinner("Gemini is comparing..."):
-                        response = model.generate_content(user_input, stream=False)
-                        result_text = response.text
-                else:
-                    client = OpenAI(
-                        api_key=st.secrets["api_keys"]["deepseek"],
-                        base_url="https://api.deepseek.com",
-                    )
-                    with st.spinner("DeepSeek is comparing..."):
-                        response = client.chat.completions.create(
-                            model="deepseek-chat",
-                            messages=[
-                                {"role": "system", "content": compare_prompt_filled},
-                                {"role": "user", "content": user_input},
-                            ],
-                            temperature=TEMPERATURE,
-                            stream=False,
+                try:
+                    if provider == "Gemini":
+                        google_key = require_api_key("google_genai", "google_api_key", "Google Gemini")
+                        if not google_key:
+                            return
+                        genai.configure(api_key=google_key)
+                        model = genai.GenerativeModel("gemini-2.5-flash", system_instruction=compare_prompt_filled)
+                        with st.spinner("Gemini is comparing..."):
+                            response = model.generate_content(user_input, stream=False)
+                            result_text = response.text
+                    else:
+                        deepseek_key = require_api_key("deepseek", "deepseek_api_key", "DeepSeek")
+                        if not deepseek_key:
+                            return
+                        client = OpenAI(
+                            api_key=deepseek_key,
+                            base_url="https://api.deepseek.com",
                         )
-                        result_text = response.choices[0].message.content
+                        with st.spinner("DeepSeek is comparing..."):
+                            response = client.chat.completions.create(
+                                model="deepseek-chat",
+                                messages=[
+                                    {"role": "system", "content": compare_prompt_filled},
+                                    {"role": "user", "content": user_input},
+                                ],
+                                temperature=TEMPERATURE,
+                                stream=False,
+                            )
+                            result_text = response.choices[0].message.content
+                except Exception as exc:
+                    st.error(f"{provider} comparison request failed: {exc}")
+                    return
 
                 st.markdown("### 💬 AI’s Comparative Evaluation")
                 st.info(result_text)
@@ -217,15 +307,21 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
     def _model_reply(provider, prompt_with_context, user_message):
         """Unified model call for Gemini / DeepSeek."""
         if provider == "Gemini":
-            genai.configure(api_key=st.secrets["api_keys"]["google_genai"])
-            qa_model = genai.GenerativeModel("gemini-2.0-flash", system_instruction=prompt_with_context)
+            google_key = require_api_key("google_genai", "google_api_key", "Google Gemini")
+            if not google_key:
+                return None
+            genai.configure(api_key=google_key)
+            qa_model = genai.GenerativeModel("gemini-2.5-flash", system_instruction=prompt_with_context)
             with st.spinner("Gemini is responding..."):
                 resp = qa_model.generate_content(user_message, stream=False)
             return resp.text
     
         elif provider == "DeepSeek":
+            deepseek_key = require_api_key("deepseek", "deepseek_api_key", "DeepSeek")
+            if not deepseek_key:
+                return None
             client = OpenAI(
-                api_key=st.secrets["api_keys"]["deepseek"],
+                api_key=deepseek_key,
                 base_url="https://api.deepseek.com",
             )
             with st.spinner("DeepSeek is responding..."):
@@ -241,7 +337,8 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
             return resp.choices[0].message.content
     
         else:
-            return "⚠️ Invalid provider."
+            st.error("Invalid provider.")
+            return None
     
     # -------------------------------------------
     # MAIN Q&A INTERFACE
@@ -283,7 +380,7 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
                 {"q": q, "history": [], "pending": [], "done": False} for q in qs
             ]
     
-            provider = st.session_state["model_provider"]
+            provider = st.session_state.get("model_provider", MODEL_PROVIDER)
             qa_prompt_text = qa_prompt.format(
                 mri=st.session_state.get("mri_text", ""),
                 diagnosis=st.session_state.get("diagnosis_result", ""),
@@ -309,8 +406,13 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
     {chr(10).join([f"{i+1}. {q}" for i, q in enumerate(qs)])}
     """
     
-            # --- Call the model ---
-            ai_text = _model_reply(provider, qa_prompt_text, user_msg)
+            try:
+                ai_text = _model_reply(provider, qa_prompt_text, user_msg)
+            except Exception as exc:
+                st.error(f"{provider} Q&A request failed: {exc}")
+                ai_text = None
+            if not ai_text:
+                return
     
             # --- Parse the model output into per-question blocks ---
             blocks = re.split(r"(?m)^(?=\d+\.\s)", ai_text.strip())
@@ -321,8 +423,7 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
                 st.session_state.qa_threads[j]["history"].append((q, ans))
                 st.session_state.qa_threads[j]["pending"] = _extract_followups(ans)
     
-            #st.rerun()
-            st.experimental_rerun()
+            rerun_app()
  
     # -----------------------
     # DISPLAY SECTION
@@ -381,21 +482,27 @@ def run_body_region_app(region_name, system_prompt, compare_prompt, qa_prompt, r
                         "Refine ONLY the advice for this question. "
                         "If another clarification is needed for THIS item, add ONE new ❓ line."
                     )
-                    with st.spinner(f"Refining Q{i+1}..."):
-                        refined = _model_reply(st.session_state["model_provider"], sys_prompt, user_follow)
+                    try:
+                        with st.spinner(f"Refining Q{i+1}..."):
+                            refined = _model_reply(st.session_state.get("model_provider", MODEL_PROVIDER), sys_prompt, user_follow)
+                    except Exception as exc:
+                        st.error(f"Follow-up request failed: {exc}")
+                        refined = None
+                    if not refined:
+                        return
     
                     th["history"].append((f"(Follow-up) {fu}: {fu_answer}", refined))
                     th["pending"] = _extract_followups(refined)
-                    st.experimental_rerun()
+                    rerun_app()
     
                 elif mark_done_here:
                     th["done"] = True
                     th["pending"] = []
-                    st.experimental_rerun()
+                    rerun_app()
     
             else:
                 # No pending follow-ups
                 if not th["done"]:
                     if st.button(f"✅ Mark Q{i+1} done", key=f"mark_done_btn_{i}"):
                         th["done"] = True
-                        st.experimental_rerun()
+                        rerun_app()

@@ -36,10 +36,29 @@ If user input is bilingual (e.g., partly in Chinese), respond in the same langua
 
 
 
-KNEE_REHAB_LINKS = {
-    "UPCOMING"
+KNEE_REHAB_LINKS =  {
+    "Medial Collateral Ligament Sprain": "https://purephysiotherapy.co.uk/exercise-plans/early-medial-collateral-ligament-sprain-exercise-programme/",
+    "Quadricep Strain": "https://purephysiotherapy.co.uk/exercise-plans/early-quadricep-strain-exercise-programme/",
+    "Degenerative Meniscus": "https://purephysiotherapy.co.uk/exercise-plans/early-degenerative-meniscus-exercise-programme/",
+    "Femoral Nerve Radiculopathy": "https://purephysiotherapy.co.uk/exercise-plans/early-femoral-nerve-radiculopathy-exercise-programme/",
+    "Bowed Knees": "https://purephysiotherapy.co.uk/exercise-plans/early-bowed-knees-exercise-programme/",
+    "Benign Joint Hypermobility Syndrome": "https://purephysiotherapy.co.uk/exercise-plans/early-benign-joint-hypermobility-syndrome-exercise-programme/",
+    "Patellofemoral Pain Syndrome (PFPS)": "https://purephysiotherapy.co.uk/exercise-plans/early-patellofemoral-pain-syndrome-pfps-exercise-programme/",
+    "Iliotibial Band Syndrome": "https://purephysiotherapy.co.uk/exercise-plans/early-iliotibial-band-syndrome-exercise-programme/",
+    "Knee Osteoarthritis": "https://purephysiotherapy.co.uk/exercise-plans/early-knee-osteoarthritis-exercise-programme/",
+    "Patellar Tendinopathy": "https://purephysiotherapy.co.uk/exercise-plans/early-patellar-tendinopathy-exercise-programme/",
+    "Osgood-Schlatter Disease": "https://purephysiotherapy.co.uk/exercise-plans/early-osgood-schlatter-disease-exercise-programme/",
+    "Meniscus Injury": "https://purephysiotherapy.co.uk/exercise-plans/early-meniscus-injury-exercise-programme/",
+    "Knee Replacement Surgery": "https://purephysiotherapy.co.uk/exercise-plans/early-knee-replacement-surgery-exercise-programme/",
+    "Lateral Collateral Ligament (LCL) Injury": "https://purephysiotherapy.co.uk/exercise-plans/early-lateral-collateral-ligament-lcl-injury-exercise-programme/",
+    "Fat Pad Impingement": "https://purephysiotherapy.co.uk/exercise-plans/early-fat-pad-impingement-exercise-programme/",
+    "Quadriceps Tendinopathy": "https://purephysiotherapy.co.uk/exercise-plans/early-quadriceps-tendinopathy-exercise-programme/",
+    "Anterior Cruciate Ligament (ACL) Injury": "https://purephysiotherapy.co.uk/exercise-plans/early-anterior-cruciate-ligament-acl-injury-exercise-programme/",
+    "Pes Anserine Bursitis": "https://purephysiotherapy.co.uk/exercise-plans/early-pes-anserine-bursitis-exercise-programme/",
+    "Baker’s Cyst": "https://purephysiotherapy.co.uk/exercise-plans/early-bakers-cyst-exercise-programme/",
+    "Hamstring Strain/Tear": "https://purephysiotherapy.co.uk/exercise-plans/early-hamstring-strain-tear-exercise-programme/",
+    "Patella Dislocation": "https://purephysiotherapy.co.uk/exercise-plans/early-patella-dislocation-exercise-programme/",
 }
-
 
 
 
@@ -85,8 +104,6 @@ Now, you will receive the user's follow-up questions about anything (e.g., exerc
 DO NOT say in your answer, e.g.,  consult a physiotherapist, just give user your best avaialble answer.  
 Be empathetic, precise, not too concise explain better in patient's langulage. and always within physiotherapy and rehabilitation boundaries.
 """
-
-     
 
 
 

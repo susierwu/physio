@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "AI-powered physiotherapy diagnosis assistant (Streamlit + Gemini + DeepSeek + OpenAI)"
 readme = "README.md"
 authors = [{ name = "Susie", email = "sw.susdata@gmail.com" }]
-requires-python = ">=3.9"
+requires-python = ">=3.9 & <=3.31" #python 3.13 problem with gemini 
 
 dependencies = [
     # --- Web interface ---

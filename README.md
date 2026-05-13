@@ -32,14 +32,17 @@ It is an **educational and physiotherapy support tool**, not a substitute for pr
 > 👉 [https://www.python.org/downloads/](https://www.python.org/downloads/)  
 > **务必在安装时勾选 “Add Python to PATH” 选项。**
 
+> 安装git: git-stm.com/install/ 
+> 然后可以通过git bash操作，不需要cmd
 ---
 
 ### 🪜 运行步骤（1️⃣ → 5️⃣）
 
 ```bash
 # 1️⃣ 克隆项目
-git clone git@github.com:susierwu/physio.git
+git clone https://github.com/sw-data/physio_asst.git
 cd physio
+> 👉 !问我要APIkey! 
 
 # 2️⃣ 若提示 pip 不存在，先修复 pip
 python3 -m ensurepip --upgrade
