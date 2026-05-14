@@ -1,6 +1,8 @@
 # 🩺 Physio Assistant App
 
-## Overview  
+### 🔗 **App URL:**   [Physio Assistant App](https://your-streamlit-app-url.streamlit.app/)
+
+## Overview
 **Physio Assistant** is an AI-powered interactive web app built with **Streamlit**, designed to help users understand their radiology findings and explore tailored at-home rehabilitation guidance.  
 
 The app interprets radiology summaries using LLM, generates human-readable explanations, compares medical opinions, and offers follow-up interactive Q&A feedback — helping users bridge the gap between medical diagnostics and practical rehabilitation knowledge.  
@@ -10,11 +12,11 @@ It is an **educational and physiotherapy support tool**, not a substitute for pr
 ---
 
 ## 🚀 Key Features
-- **AI Radiology Interpreter:** Translates MRI/x-ray/ ultrasound findings and suggest most likely conditions.  
-- **Rehabilitation Plan:** Suggests safe, evidence-based at-home rehab movements for your  conditions.  
-- **Doctor Comparison Mode:** Displays and contrasts two different medical opinions, helping users visualize diagnostic discrepancies and treatment focus areas.  
-- **Interactive Q&A Assistant:** Users can ask any clarifying or follow-up questions — the AI responds contextually, providing ongoing educational feedback.  
-- **Model Comparison:** Allows switching between **Gemini** and **DeepSeek** engines for explanation quality benchmarking.  
+- **AI radiology interpreter:** Translates MRI/x-ray/ ultrasound findings and suggest most likely conditions.  
+- **Rehabilitation plan:** Suggests safe, evidence-based at-home rehab movements for your  conditions.  
+- **Doctor comparison mode:** Displays and contrasts two different medical opinions, helping users visualize diagnostic discrepancies and treatment focus areas.  
+- **Interactive Q&A assistant:** Users can ask any clarifying or follow-up questions — the AI responds contextually, providing ongoing educational feedback.  
+- **Model comparison:** Allows switching between **Gemini** and **DeepSeek** engines for explanation quality benchmarking.  
 
 ---
 
@@ -22,38 +24,46 @@ It is an **educational and physiotherapy support tool**, not a substitute for pr
 | Layer | Technology |
 |-------|-------------|
 | Front-end | [Streamlit](https://streamlit.io/) |
-| LLM Modes | Google Gemini 2.0 Flash, DeepSeek API |
+| LLM Modes | Google Gemini 2.5 Flash, DeepSeek API |
 
 ---
 
-## 🧠 本地运行（macOS / Windows）
+## 🧠 Local Setup
 
-> 若尚未安装 Python，请先从官方页面安装最新版本：  
-> 👉 [https://www.python.org/downloads/](https://www.python.org/downloads/)  
-> **务必在安装时勾选 “Add Python to PATH” 选项。**
+If Python is not installed yet, install it from the official site:  
+👉 [https://www.python.org/downloads/](https://www.python.org/downloads/)
 
-> 安装git: git-stm.com/install/ 
-> 然后可以通过git bash操作，不需要cmd
+On Windows, select **Add Python to PATH** during installation.
+
+If Git is not installed yet, install it from:  
+👉 [https://git-scm.com/downloads](https://git-scm.com/downloads)
+
+On Windows, you can run the commands below in **Git Bash**, PowerShell, or Command Prompt.
+
 ---
 
-### 🪜 运行步骤（1️⃣ → 5️⃣）
+### 🪜 Run Steps (1 → 5) on MacOS
 
 ```bash
-# 1️⃣ 克隆项目
-git clone https://github.com/sw-data/physio_asst.git
+# 1. Clone the repository
+git clone https://github.com/susierwu/physio.git
 cd physio
-> 👉 !问我要APIkey! 
 
-# 2️⃣ 若提示 pip 不存在，先修复 pip
-python3 -m ensurepip --upgrade
+# 2. Create a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
 
-# 3️⃣ 安装依赖库
+# 3. Install dependencies
 python3 -m pip install -r requirements.txt
-# （Windows 用户可将以上命令中的 python3 替换为 python）
 
-# 4️⃣ 启动应用
+# 4. Create local Streamlit secrets file
+mkdir -p .streamlit
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml
+
+# Then edit .streamlit/secrets.toml
+# and paste your own API keys 
+
+# 5. Start the app
 streamlit run src/physio_asst/streamlit_app/app.py
 
-# 5️⃣ 浏览器访问（若未自动打开）
-# http://localhost:8501
-
+```
